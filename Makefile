@@ -64,3 +64,10 @@ set-version:
 ifneq ($(SET_ALPHA_VERSION), 0)
 	bash -c "sed -i \"s@_VERSION[ ]*=[ ]*[\\\"\'][0-9]\+\\.[0-9]\+\\.[0-9]\+[\\\"\'].*@_VERSION = \\\"$(PKG_VERSION)\\\"@\" setup.py"
 endif
+
+.PHONY: git-tag
+git-tag:
+ifeq ($(TRAVIS_BRANCH), master)
+	git tag $(PKG_VERSION)
+	git push origin $(PKG_VERSION)
+endif
