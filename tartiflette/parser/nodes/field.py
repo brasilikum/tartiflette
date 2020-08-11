@@ -104,7 +104,7 @@ class NodeField(Node):
             if isinstance(result, list) and isinstance(coerced, list):
                 for index, raw in enumerate(result):
                     raw_typename = get_typename(raw)
-                    coroutz = coroutz + self._get_coroutz_from_child(
+                    coroutz += self._get_coroutz_from_child(
                         execution_ctx,
                         request_ctx,
                         raw,
@@ -183,11 +183,7 @@ class NodeField(Node):
             self.marshalled = coerced
 
         if isinstance(raw, Exception):
-            if (
-                (self.cant_be_null or self.contains_not_null)
-                and self.parent
-                and self.cant_be_null
-            ):
+            if self.parent and self.cant_be_null:
                 self.parent.bubble_error()
 
             _add_errors_to_execution_context(

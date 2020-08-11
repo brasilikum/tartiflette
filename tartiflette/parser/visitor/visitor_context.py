@@ -5,7 +5,7 @@ from typing import Dict, List, Optional
 def _create_node_name(gql_type: str, name: Optional[str] = None):
     node_name = gql_type
     if name:
-        node_name = node_name + "(%s)" % name
+        node_name += "(%s)" % name
     return node_name
 
 

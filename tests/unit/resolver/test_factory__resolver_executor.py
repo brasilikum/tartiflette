@@ -43,8 +43,7 @@ def _resolver_executor_mock():
     field.gql_type = "aType"
     field.arguments = {}
 
-    res_ex = _ResolverExecutor(FakeAsyncMock(), field)
-    return res_ex
+    return _ResolverExecutor(FakeAsyncMock(), field)
 
 
 @pytest.mark.asyncio

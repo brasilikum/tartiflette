@@ -387,11 +387,11 @@ class GraphQLSchema:
         return errors
 
     def _validate_non_empty_object(self) -> List[str]:
-        errors = []
-        for type_name, gql_type in self._gql_types.items():
-            if isinstance(gql_type, GraphQLObjectType) and not gql_type.fields:
-                errors.append(f"Type < {type_name} > has no fields.")
-        return errors
+        return [
+            f"Type < {type_name} > has no fields."
+            for type_name, gql_type in self._gql_types.items()
+            if isinstance(gql_type, GraphQLObjectType) and not gql_type.fields
+        ]
 
     def _validate_union_is_acceptable(self) -> List[str]:
         errors = []
@@ -408,18 +408,12 @@ class GraphQLSchema:
         return errors
 
     def _validate_all_scalars_have_implementations(self) -> List[str]:
-        errors = []
-        for type_name, gql_type in self._gql_types.items():
-            if isinstance(gql_type, GraphQLScalarType):
-                if (
-                    gql_type.coerce_output is None
-                    or gql_type.coerce_input is None
-                ):
-                    errors.append(
-                        f"Scalar < {type_name} > "
-                        f"is missing an implementation"
-                    )
-        return errors
+        return [
+            f"Scalar < {type_name} > " f"is missing an implementation"
+            for type_name, gql_type in self._gql_types.items()
+            if isinstance(gql_type, GraphQLScalarType)
+            and ((gql_type.coerce_output is None or gql_type.coerce_input is None))
+        ]
 
     def _validate_enum_values_are_unique(self) -> List[str]:
         errors = []
@@ -439,7 +433,7 @@ class GraphQLSchema:
     ) -> List[str]:
         errors = []
         rtype = reduce_type(obj.gql_type)
-        if not rtype in self._input_types:
+        if rtype not in self._input_types:
             errors.append(
                 f"{message_prefix} is of type "
                 f"< {rtype} > which is not a Scalar, "

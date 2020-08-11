@@ -17,11 +17,9 @@ def call_with_mocked_resolver_factory(acallable, *args, **kargs):
         MOCKED_GET_RESOLVER_EXECUTOR
     )
 
-    ret = acallable(*args, **kargs)
-
     ResolverExecutorFactory.get_resolver_executor = old_methd
 
-    return ret
+    return acallable(*args, **kargs)
 
 
 __all__ = [

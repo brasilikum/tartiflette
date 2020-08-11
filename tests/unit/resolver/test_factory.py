@@ -26,7 +26,7 @@ def test_resolver_factory__built_in_coercer_none_val():
 def test_resolver_factory__object_coercer():
     from tartiflette.resolver.factory import _object_coercer
 
-    assert _object_coercer(None, None, None) == None
+    assert _object_coercer(None, None, None) is None
     assert _object_coercer(None, Mock(), None) == {}
 
 
@@ -371,11 +371,10 @@ def directive_list_mock():
     cllbs_b = Mock()
     cllbs_b.on_introspection = Mock(return_val="intro_b")
 
-    directives = [
+    return [
         {"callables": cllbs_a, "args": {"a": "b"}},
         {"callables": cllbs_b, "args": {"c": "d"}},
     ]
-    return directives
 
 
 def test_resolver_factory__introspection_directives(directive_list_mock):

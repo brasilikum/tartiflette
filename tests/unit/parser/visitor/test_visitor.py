@@ -1383,7 +1383,7 @@ def test_on_selection_set_in(
 ):
     location = Location(1, 1, 1, 2)
     a_visitor._internal_ctx.field_path = []
-    for i in range(0, depth):
+    for i in range(depth):
         a_visitor._internal_ctx.field_path.append(str(i))
 
     a_visitor._internal_ctx.operation = Mock(location=location)

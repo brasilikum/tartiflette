@@ -66,9 +66,7 @@ class SchemaTransformer(Transformer_InPlace):
         for child in tree.children:
             if child.type == "named_type":
                 setattr(self._schema, operation_name + "_type", child.value)
-            elif child.type == operation_name.upper():
-                pass
-            else:
+            elif child.type != operation_name.upper():
                 raise InvalidSDL(
                     "Invalid GraphQL named type for `{}` "
                     "operation definition, got `{}`".format(
@@ -115,12 +113,12 @@ class SchemaTransformer(Transformer_InPlace):
         description = None
         name = None
         for child in tree.children:
+            if child.type in ["discard", "SCALAR"]:
+                continue
             if child.type == "description":
                 description = child.value
             elif child.type == "IDENT":
                 name = child.value
-            elif child.type == "discard" or child.type == "SCALAR":
-                pass
             else:
                 raise UnexpectedASTNode(
                     "Unexpected AST node `{}`, type `{}`".format(
@@ -139,14 +137,14 @@ class SchemaTransformer(Transformer_InPlace):
         name = None
         members = None
         for child in tree.children:
+            if child.type in ["discard", "UNION"]:
+                continue
             if child.type == "description":
                 description = child.value
             elif child.type == "IDENT":
                 name = child.value
             elif child.type == "union_members":
                 members = child.value
-            elif child.type == "discard" or child.type == "UNION":
-                pass
             else:
                 raise UnexpectedASTNode(
                     "Unexpected AST node `{}`, type `{}`".format(
@@ -171,14 +169,14 @@ class SchemaTransformer(Transformer_InPlace):
         name = None
         values = None
         for child in tree.children:
+            if child.type in ["discard", "ENUM"]:
+                continue
             if child.type == "description":
                 description = child.value
             elif child.type == "IDENT":
                 name = child.value
             elif child.type == "enum_values":
                 values = child.value
-            elif child.type == "discard" or child.type == "ENUM":
-                pass
             else:
                 raise UnexpectedASTNode(
                     "Unexpected AST node `{}`, type `{}`".format(
@@ -226,14 +224,14 @@ class SchemaTransformer(Transformer_InPlace):
         name = None
         fields = None
         for child in tree.children:
+            if child.type in ["discard", "INTERFACE"]:
+                continue
             if child.type == "description":
                 description = child.value
             elif child.type == "IDENT":
                 name = child.value
             elif child.type == "fields":
                 fields = child.value
-            elif child.type == "discard" or child.type == "INTERFACE":
-                pass
             else:
                 raise UnexpectedASTNode(
                     "Unexpected AST node `{}`, type `{}`".format(
@@ -254,6 +252,8 @@ class SchemaTransformer(Transformer_InPlace):
         interfaces = None
         fields = None
         for child in tree.children:
+            if child.type in ["discard", "TYPE"]:
+                continue
             if child.type == "description":
                 description = child.value
             elif child.type == "IDENT":
@@ -262,8 +262,6 @@ class SchemaTransformer(Transformer_InPlace):
                 interfaces = child.value
             elif child.type == "fields":
                 fields = child.value
-            elif child.type == "discard" or child.type == "TYPE":
-                pass
             else:
                 raise UnexpectedASTNode(
                     "Unexpected AST node `{}`, type `{}`".format(
@@ -296,14 +294,14 @@ class SchemaTransformer(Transformer_InPlace):
         name = None
         fields = None
         for child in tree.children:
+            if child.type in ["discard", "INPUT"]:
+                continue
             if child.type == "description":
                 description = child.value
             elif child.type == "IDENT":
                 name = child.value
             elif child.type == "input_fields":
                 fields = child.value
-            elif child.type == "discard" or child.type == "INPUT":
-                pass
             else:
                 raise UnexpectedASTNode(
                     "Unexpected AST node `{}`, type `{}`".format(
@@ -344,9 +342,7 @@ class SchemaTransformer(Transformer_InPlace):
                 arguments = child.value
             elif child.type == "directives":
                 directives = child.value
-            elif child.type == "discard":
-                pass
-            else:
+            elif child.type != "discard":
                 raise UnexpectedASTNode(
                     "Unexpected AST node `{}`, type `{}`".format(
                         child, child.__class__.__name__
@@ -406,6 +402,8 @@ class SchemaTransformer(Transformer_InPlace):
         applies_on = None
         arguments = None
         for child in tree.children:
+            if child.type in ["discard", "DIRECTIVE"]:
+                continue
             if child.type == "description":
                 description = child.value
             elif child.type == "IDENT":
@@ -416,8 +414,6 @@ class SchemaTransformer(Transformer_InPlace):
                 pass
             elif child.type == "directive_locations":
                 applies_on = child.value
-            elif child.type == "discard" or child.type == "DIRECTIVE":
-                pass
             else:
                 raise UnexpectedASTNode(
                     "Unexpected AST node `{}`, type `{}`".format(

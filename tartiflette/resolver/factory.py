@@ -142,11 +142,11 @@ def _get_coercer(field: "GraphQLField") -> Optional[Callable]:
             coercer = _is_an_enum(reduced_type, field.schema)
             if not coercer:
                 coercer = _is_a_scalar(reduced_type, field.schema)
-                if not coercer:
-                    # per default you're an object
-                    coercer = partial(
-                        _object_coercer, reduced_type if not is_union else None
-                    )
+            if not coercer:
+                # per default you're an object
+                coercer = partial(
+                    _object_coercer, reduced_type if not is_union else None
+                )
         except AttributeError:
             coercer = partial(
                 _object_coercer, reduced_type if not is_union else None
